@@ -1,4 +1,4 @@
-# TrustDeploy
+# SealedShip
 
 A container image supply-chain gate: images must carry a valid Cosign signature from the trusted
 release key before they can be deployed. Verification fails closed, and every decision is audited.
