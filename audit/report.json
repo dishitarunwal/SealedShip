@@ -1,0 +1,702 @@
+[
+  {
+    "event_id": "ebf0c89c-c68d-4bae-9255-50d3c4480a32",
+    "timestamp_utc": "2026-10-20T18:09:27+00:00",
+    "action": "verify",
+    "test_label": "TC01",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.0",
+    "resolved_digest": "sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "decision": "ACCEPT",
+    "reason_code": "SIGNATURE_VERIFIED",
+    "reason": "Valid signature from trusted key trusted/cosign.pub for sha256:deffd203e38f\u2026",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 0,
+    "tool_stderr_excerpt": "",
+    "duration_ms": 371,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "a038c36a-517a-4967-a9c9-a02deaad5b1e",
+    "timestamp_utc": "2026-10-20T18:09:35+00:00",
+    "action": "verify",
+    "test_label": "TC02",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.1.0-unsigned",
+    "resolved_digest": "sha256:b9e40137b00c862a6b41ee5395c8d7c627e3724015431781e0820f76db70e0e9",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:b9e40137b00c862a6b41ee5395c8d7c627e3724015431781e0820f76db70e0e9",
+    "decision": "REJECT",
+    "reason_code": "NO_SIGNATURE",
+    "reason": "The image has no Cosign signature in the registry.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 10,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no signatures found\nerror during command execution: no signatures found",
+    "duration_ms": 277,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "8464a05d-d2fa-49e6-b6ab-5826ed098001",
+    "timestamp_utc": "2026-10-20T18:09:36+00:00",
+    "action": "verify",
+    "test_label": "TC03",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.1-attacker",
+    "resolved_digest": "sha256:d5b8709acdb347ffe5db0d485a93d6cc96bedec5ae0049dba426bb70d8f31678",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:d5b8709acdb347ffe5db0d485a93d6cc96bedec5ae0049dba426bb70d8f31678",
+    "decision": "REJECT",
+    "reason_code": "UNTRUSTED_SIGNER",
+    "reason": "Signature(s) exist, but none validate against the trusted public key.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 1,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no matching attestations: failed to verify signature: could not verify envelope: accepted signatures do not match threshold, Found: 0, Expected 1\nerror during command execution: no matching attestations: failed to verify signature: could not verify envelope: accepted signatures do not match threshold, Found: 0, Expected 1",
+    "duration_ms": 285,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "d6f46d81-ed61-469f-af79-6d79f98f33cb",
+    "timestamp_utc": "2026-10-20T18:09:36+00:00",
+    "action": "verify",
+    "test_label": "TC04a",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.2-forged",
+    "resolved_digest": "sha256:15fec4ab6a7720deff992d74b5b06dd132fecaa3847144a7a5a5562023db1fbe",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:15fec4ab6a7720deff992d74b5b06dd132fecaa3847144a7a5a5562023db1fbe",
+    "decision": "REJECT",
+    "reason_code": "SIGNATURE_IMAGE_MISMATCH",
+    "reason": "A signature exists, but it was issued for a different image digest.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 1,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no matching attestations: failed to verify signature: provided artifact digest does not match any digest in statement\nerror during command execution: no matching attestations: failed to verify signature: provided artifact digest does not match any digest in statement",
+    "duration_ms": 277,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "78835c82-b354-46a0-9583-aa4fe665a8dd",
+    "timestamp_utc": "2026-10-20T18:09:37+00:00",
+    "action": "verify",
+    "test_label": "TC04b",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.0",
+    "resolved_digest": "sha256:6b00b34620a75c48de3e08a1964f67f82105050ab550a482436268e4d6867815",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:6b00b34620a75c48de3e08a1964f67f82105050ab550a482436268e4d6867815",
+    "decision": "REJECT",
+    "reason_code": "NO_SIGNATURE",
+    "reason": "The image has no Cosign signature in the registry.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 10,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no signatures found\nerror during command execution: no signatures found",
+    "duration_ms": 272,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "b0a60d7e-9daa-423f-8ae0-3800c66fbe6d",
+    "timestamp_utc": "2026-10-20T18:09:37+00:00",
+    "action": "deploy",
+    "test_label": "TC05a",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.0",
+    "resolved_digest": "sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "decision": "REJECT",
+    "reason_code": "VERIFICATION_TOOL_ERROR",
+    "reason": "Verification tool not available (/nonexistent/cosign); failing closed.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": null,
+    "tool_stderr_excerpt": "",
+    "duration_ms": 136,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "803b9b98-eaac-4213-8c82-c387a84008c4",
+    "timestamp_utc": "2026-10-20T18:09:38+00:00",
+    "action": "deploy",
+    "test_label": "TC05b",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.0",
+    "resolved_digest": null,
+    "verified_ref": null,
+    "decision": "REJECT",
+    "reason_code": "IMAGE_RESOLUTION_FAILED",
+    "reason": "Could not resolve the image to a digest; failing closed.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": null,
+    "tool_stderr_excerpt": "ERROR: failed to do request: Head \"http://localhost:5001/v2/trustdeploy/sample-app/manifests/1.0.0\": dial tcp [::1]:5001: connect: connection refused",
+    "duration_ms": 186,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "ae417f14-9f1d-44c4-8098-4c0fbffe508a",
+    "timestamp_utc": "2026-10-20T18:09:40+00:00",
+    "action": "verify",
+    "test_label": "TC05c",
+    "image_ref": "docker.io/library/nginx:latest",
+    "resolved_digest": null,
+    "verified_ref": null,
+    "decision": "REJECT",
+    "reason_code": "REGISTRY_NOT_ALLOWED",
+    "reason": "Registry 'docker.io' is not in the policy allow-list.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": null,
+    "tool_stderr_excerpt": "",
+    "duration_ms": 0,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "b1aac8a8-f1f5-4f9b-b104-e2a3cf28e0b2",
+    "timestamp_utc": "2026-10-20T18:09:40+00:00",
+    "action": "verify",
+    "test_label": "TC06",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.0",
+    "resolved_digest": "sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "decision": "ACCEPT",
+    "reason_code": "SIGNATURE_VERIFIED",
+    "reason": "Valid signature from trusted key trusted/cosign.pub for sha256:deffd203e38f\u2026",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 0,
+    "tool_stderr_excerpt": "",
+    "duration_ms": 269,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "da519f3c-6bac-40c2-93ae-0cdc81e2cc3e",
+    "timestamp_utc": "2026-10-20T18:09:41+00:00",
+    "action": "verify",
+    "test_label": "TC06",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.1.0-unsigned",
+    "resolved_digest": "sha256:b9e40137b00c862a6b41ee5395c8d7c627e3724015431781e0820f76db70e0e9",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:b9e40137b00c862a6b41ee5395c8d7c627e3724015431781e0820f76db70e0e9",
+    "decision": "REJECT",
+    "reason_code": "NO_SIGNATURE",
+    "reason": "The image has no Cosign signature in the registry.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 10,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no signatures found\nerror during command execution: no signatures found",
+    "duration_ms": 248,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "b1016abc-5a53-4e25-bf66-28891b81b09d",
+    "timestamp_utc": "2026-10-20T18:09:41+00:00",
+    "action": "verify",
+    "test_label": "TC06",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.1-attacker",
+    "resolved_digest": "sha256:d5b8709acdb347ffe5db0d485a93d6cc96bedec5ae0049dba426bb70d8f31678",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:d5b8709acdb347ffe5db0d485a93d6cc96bedec5ae0049dba426bb70d8f31678",
+    "decision": "REJECT",
+    "reason_code": "UNTRUSTED_SIGNER",
+    "reason": "Signature(s) exist, but none validate against the trusted public key.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 1,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no matching attestations: failed to verify signature: could not verify envelope: accepted signatures do not match threshold, Found: 0, Expected 1\nerror during command execution: no matching attestations: failed to verify signature: could not verify envelope: accepted signatures do not match threshold, Found: 0, Expected 1",
+    "duration_ms": 303,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "53ee9525-a78a-4ca9-afca-d6d9bf94142c",
+    "timestamp_utc": "2026-10-20T18:09:41+00:00",
+    "action": "verify",
+    "test_label": "TC06",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.2-forged",
+    "resolved_digest": "sha256:15fec4ab6a7720deff992d74b5b06dd132fecaa3847144a7a5a5562023db1fbe",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:15fec4ab6a7720deff992d74b5b06dd132fecaa3847144a7a5a5562023db1fbe",
+    "decision": "REJECT",
+    "reason_code": "SIGNATURE_IMAGE_MISMATCH",
+    "reason": "A signature exists, but it was issued for a different image digest.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 1,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no matching attestations: failed to verify signature: provided artifact digest does not match any digest in statement\nerror during command execution: no matching attestations: failed to verify signature: provided artifact digest does not match any digest in statement",
+    "duration_ms": 312,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "36e5a743-c1ed-42fa-adec-aa4d67dd19a1",
+    "timestamp_utc": "2026-10-20T18:09:42+00:00",
+    "action": "deploy",
+    "test_label": "DEPLOY-ATTACKER",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.1-attacker",
+    "resolved_digest": "sha256:d5b8709acdb347ffe5db0d485a93d6cc96bedec5ae0049dba426bb70d8f31678",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:d5b8709acdb347ffe5db0d485a93d6cc96bedec5ae0049dba426bb70d8f31678",
+    "decision": "REJECT",
+    "reason_code": "UNTRUSTED_SIGNER",
+    "reason": "Signature(s) exist, but none validate against the trusted public key.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 1,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no matching attestations: failed to verify signature: could not verify envelope: accepted signatures do not match threshold, Found: 0, Expected 1\nerror during command execution: no matching attestations: failed to verify signature: could not verify envelope: accepted signatures do not match threshold, Found: 0, Expected 1",
+    "duration_ms": 263,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "ee4003f8-134f-4b5a-b53f-3d5f6f697d67",
+    "timestamp_utc": "2026-10-20T18:09:43+00:00",
+    "action": "deploy",
+    "test_label": "DEPLOY-TRUSTED",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.0",
+    "resolved_digest": "sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "decision": "ACCEPT",
+    "reason_code": "SIGNATURE_VERIFIED",
+    "reason": "Valid signature from trusted key trusted/cosign.pub for sha256:deffd203e38f\u2026",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 0,
+    "tool_stderr_excerpt": "",
+    "duration_ms": 291,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "859dfd42-7d03-4258-ad8f-12539ec1f3de",
+    "timestamp_utc": "2026-10-20T18:18:07+00:00",
+    "action": "verify",
+    "test_label": "CLI-CHECK",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.0",
+    "resolved_digest": "sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "decision": "ACCEPT",
+    "reason_code": "SIGNATURE_VERIFIED",
+    "reason": "Valid signature from trusted key trusted/cosign.pub for sha256:deffd203e38f\u2026",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 0,
+    "tool_stderr_excerpt": "",
+    "duration_ms": 594,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "a6a422ba-0e61-4f24-baf5-875237cf0794",
+    "timestamp_utc": "2026-10-20T18:20:16+00:00",
+    "action": "verify",
+    "test_label": "WEB-UI",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.2-forged",
+    "resolved_digest": "sha256:15fec4ab6a7720deff992d74b5b06dd132fecaa3847144a7a5a5562023db1fbe",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:15fec4ab6a7720deff992d74b5b06dd132fecaa3847144a7a5a5562023db1fbe",
+    "decision": "REJECT",
+    "reason_code": "SIGNATURE_IMAGE_MISMATCH",
+    "reason": "A signature exists, but it was issued for a different image digest.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 1,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no matching attestations: failed to verify signature: provided artifact digest does not match any digest in statement\nerror during command execution: no matching attestations: failed to verify signature: provided artifact digest does not match any digest in statement",
+    "duration_ms": 624,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "75b8583a-37f2-4e4b-a429-b9df2e74cddb",
+    "timestamp_utc": "2026-10-20T18:21:24+00:00",
+    "action": "verify",
+    "test_label": "WEB-UI",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.2-forged",
+    "resolved_digest": "sha256:15fec4ab6a7720deff992d74b5b06dd132fecaa3847144a7a5a5562023db1fbe",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:15fec4ab6a7720deff992d74b5b06dd132fecaa3847144a7a5a5562023db1fbe",
+    "decision": "REJECT",
+    "reason_code": "SIGNATURE_IMAGE_MISMATCH",
+    "reason": "A signature exists, but it was issued for a different image digest.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 1,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no matching attestations: failed to verify signature: provided artifact digest does not match any digest in statement\nerror during command execution: no matching attestations: failed to verify signature: provided artifact digest does not match any digest in statement",
+    "duration_ms": 623,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "18167745-9ae5-4248-81d8-0241c4569806",
+    "timestamp_utc": "2026-10-20T18:23:44+00:00",
+    "action": "verify",
+    "test_label": "WEB-UI",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.0",
+    "resolved_digest": "sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "decision": "ACCEPT",
+    "reason_code": "SIGNATURE_VERIFIED",
+    "reason": "Valid signature from trusted key trusted/cosign.pub for sha256:deffd203e38f\u2026",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 0,
+    "tool_stderr_excerpt": "",
+    "duration_ms": 687,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "5d1f306e-955f-4d55-a196-2e61dd1bf354",
+    "timestamp_utc": "2026-10-20T18:23:50+00:00",
+    "action": "deploy",
+    "test_label": "WEB-UI",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.0",
+    "resolved_digest": "sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "decision": "ACCEPT",
+    "reason_code": "SIGNATURE_VERIFIED",
+    "reason": "Valid signature from trusted key trusted/cosign.pub for sha256:deffd203e38f\u2026",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 0,
+    "tool_stderr_excerpt": "",
+    "duration_ms": 230,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "91d21cf1-cdfd-49fd-881d-fbcea0040b59",
+    "timestamp_utc": "2026-10-20T18:23:57+00:00",
+    "action": "verify",
+    "test_label": "WEB-UI",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.1.0-unsigned",
+    "resolved_digest": "sha256:b9e40137b00c862a6b41ee5395c8d7c627e3724015431781e0820f76db70e0e9",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:b9e40137b00c862a6b41ee5395c8d7c627e3724015431781e0820f76db70e0e9",
+    "decision": "REJECT",
+    "reason_code": "NO_SIGNATURE",
+    "reason": "The image has no Cosign signature in the registry.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 10,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no signatures found\nerror during command execution: no signatures found",
+    "duration_ms": 211,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "19e8bb47-d8be-4733-a4a9-976259b0c986",
+    "timestamp_utc": "2026-10-20T18:24:03+00:00",
+    "action": "verify",
+    "test_label": "WEB-UI",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.1-attacker",
+    "resolved_digest": "sha256:d5b8709acdb347ffe5db0d485a93d6cc96bedec5ae0049dba426bb70d8f31678",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:d5b8709acdb347ffe5db0d485a93d6cc96bedec5ae0049dba426bb70d8f31678",
+    "decision": "REJECT",
+    "reason_code": "UNTRUSTED_SIGNER",
+    "reason": "Signature(s) exist, but none validate against the trusted public key.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 1,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no matching attestations: failed to verify signature: could not verify envelope: accepted signatures do not match threshold, Found: 0, Expected 1\nerror during command execution: no matching attestations: failed to verify signature: could not verify envelope: accepted signatures do not match threshold, Found: 0, Expected 1",
+    "duration_ms": 230,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "e04c60bc-04f6-4c0a-a2bd-5c45840699ca",
+    "timestamp_utc": "2026-10-20T18:24:12+00:00",
+    "action": "verify",
+    "test_label": "WEB-UI",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.2-forged",
+    "resolved_digest": "sha256:15fec4ab6a7720deff992d74b5b06dd132fecaa3847144a7a5a5562023db1fbe",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:15fec4ab6a7720deff992d74b5b06dd132fecaa3847144a7a5a5562023db1fbe",
+    "decision": "REJECT",
+    "reason_code": "SIGNATURE_IMAGE_MISMATCH",
+    "reason": "A signature exists, but it was issued for a different image digest.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 1,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no matching attestations: failed to verify signature: provided artifact digest does not match any digest in statement\nerror during command execution: no matching attestations: failed to verify signature: provided artifact digest does not match any digest in statement",
+    "duration_ms": 222,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "92dfcc2f-a7f0-432a-8c2e-ee5bb772cc3e",
+    "timestamp_utc": "2026-10-20T18:24:19+00:00",
+    "action": "deploy",
+    "test_label": "WEB-UI",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.1-attacker",
+    "resolved_digest": "sha256:d5b8709acdb347ffe5db0d485a93d6cc96bedec5ae0049dba426bb70d8f31678",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:d5b8709acdb347ffe5db0d485a93d6cc96bedec5ae0049dba426bb70d8f31678",
+    "decision": "REJECT",
+    "reason_code": "UNTRUSTED_SIGNER",
+    "reason": "Signature(s) exist, but none validate against the trusted public key.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 1,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no matching attestations: failed to verify signature: could not verify envelope: accepted signatures do not match threshold, Found: 0, Expected 1\nerror during command execution: no matching attestations: failed to verify signature: could not verify envelope: accepted signatures do not match threshold, Found: 0, Expected 1",
+    "duration_ms": 240,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "d08cb161-a853-49b3-ad2d-8d25aa8b52c0",
+    "timestamp_utc": "2026-10-20T18:24:25+00:00",
+    "action": "verify",
+    "test_label": "TC04b",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.0",
+    "resolved_digest": "sha256:6b00b34620a75c48de3e08a1964f67f82105050ab550a482436268e4d6867815",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:6b00b34620a75c48de3e08a1964f67f82105050ab550a482436268e4d6867815",
+    "decision": "REJECT",
+    "reason_code": "NO_SIGNATURE",
+    "reason": "The image has no Cosign signature in the registry.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 10,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no signatures found\nerror during command execution: no signatures found",
+    "duration_ms": 195,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "b674c550-b7d3-41ad-9282-c2b65c08c790",
+    "timestamp_utc": "2026-10-20T18:24:31+00:00",
+    "action": "deploy",
+    "test_label": "TC05a",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.0",
+    "resolved_digest": "sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "decision": "REJECT",
+    "reason_code": "VERIFICATION_TOOL_ERROR",
+    "reason": "Verification tool not available (/nonexistent/cosign); failing closed.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": null,
+    "tool_stderr_excerpt": "",
+    "duration_ms": 118,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "acce30e6-ad8b-434f-a699-fa9da0de0e47",
+    "timestamp_utc": "2026-10-20T18:24:38+00:00",
+    "action": "verify",
+    "test_label": "WEB-UI",
+    "image_ref": "docker.io/library/nginx:latest",
+    "resolved_digest": null,
+    "verified_ref": null,
+    "decision": "REJECT",
+    "reason_code": "REGISTRY_NOT_ALLOWED",
+    "reason": "Registry 'docker.io' is not in the policy allow-list.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": null,
+    "tool_stderr_excerpt": "",
+    "duration_ms": 0,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "b21b3f16-d2a0-4fe9-a24f-6cd0a5670824",
+    "timestamp_utc": "2026-10-20T18:26:20+00:00",
+    "action": "verify",
+    "test_label": "WEB-UI",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.0",
+    "resolved_digest": "sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "decision": "ACCEPT",
+    "reason_code": "SIGNATURE_VERIFIED",
+    "reason": "Valid signature from trusted key trusted/cosign.pub for sha256:deffd203e38f\u2026",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 0,
+    "tool_stderr_excerpt": "",
+    "duration_ms": 4056,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "39f71f40-f6c0-4df0-b7e1-90e591898fa5",
+    "timestamp_utc": "2026-10-20T18:26:29+00:00",
+    "action": "deploy",
+    "test_label": "WEB-UI",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.0",
+    "resolved_digest": "sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "decision": "ACCEPT",
+    "reason_code": "SIGNATURE_VERIFIED",
+    "reason": "Valid signature from trusted key trusted/cosign.pub for sha256:deffd203e38f\u2026",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 0,
+    "tool_stderr_excerpt": "",
+    "duration_ms": 1727,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "eea9278d-9294-44e2-b269-a0abb2e30423",
+    "timestamp_utc": "2026-10-20T18:26:53+00:00",
+    "action": "verify",
+    "test_label": "WEB-UI",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.1.0-unsigned",
+    "resolved_digest": "sha256:b9e40137b00c862a6b41ee5395c8d7c627e3724015431781e0820f76db70e0e9",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:b9e40137b00c862a6b41ee5395c8d7c627e3724015431781e0820f76db70e0e9",
+    "decision": "REJECT",
+    "reason_code": "NO_SIGNATURE",
+    "reason": "The image has no Cosign signature in the registry.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 10,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no signatures found\nerror during command execution: no signatures found",
+    "duration_ms": 1983,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "dfa32fc3-0e42-4c12-b411-6fcd6ae02e16",
+    "timestamp_utc": "2026-10-20T18:26:57+00:00",
+    "action": "verify",
+    "test_label": "WEB-UI",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.1-attacker",
+    "resolved_digest": "sha256:d5b8709acdb347ffe5db0d485a93d6cc96bedec5ae0049dba426bb70d8f31678",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:d5b8709acdb347ffe5db0d485a93d6cc96bedec5ae0049dba426bb70d8f31678",
+    "decision": "REJECT",
+    "reason_code": "UNTRUSTED_SIGNER",
+    "reason": "Signature(s) exist, but none validate against the trusted public key.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 1,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no matching attestations: failed to verify signature: could not verify envelope: accepted signatures do not match threshold, Found: 0, Expected 1\nerror during command execution: no matching attestations: failed to verify signature: could not verify envelope: accepted signatures do not match threshold, Found: 0, Expected 1",
+    "duration_ms": 1070,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "6c3dc5d2-6e46-4163-867c-15cf36cb2fae",
+    "timestamp_utc": "2026-10-20T18:27:04+00:00",
+    "action": "verify",
+    "test_label": "WEB-UI",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.2-forged",
+    "resolved_digest": "sha256:15fec4ab6a7720deff992d74b5b06dd132fecaa3847144a7a5a5562023db1fbe",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:15fec4ab6a7720deff992d74b5b06dd132fecaa3847144a7a5a5562023db1fbe",
+    "decision": "REJECT",
+    "reason_code": "SIGNATURE_IMAGE_MISMATCH",
+    "reason": "A signature exists, but it was issued for a different image digest.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 1,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no matching attestations: failed to verify signature: provided artifact digest does not match any digest in statement\nerror during command execution: no matching attestations: failed to verify signature: provided artifact digest does not match any digest in statement",
+    "duration_ms": 1104,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "1aab2e60-e7b8-40a0-a640-d3893db38428",
+    "timestamp_utc": "2026-10-20T18:27:11+00:00",
+    "action": "deploy",
+    "test_label": "WEB-UI",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.1-attacker",
+    "resolved_digest": "sha256:d5b8709acdb347ffe5db0d485a93d6cc96bedec5ae0049dba426bb70d8f31678",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:d5b8709acdb347ffe5db0d485a93d6cc96bedec5ae0049dba426bb70d8f31678",
+    "decision": "REJECT",
+    "reason_code": "UNTRUSTED_SIGNER",
+    "reason": "Signature(s) exist, but none validate against the trusted public key.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 1,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no matching attestations: failed to verify signature: could not verify envelope: accepted signatures do not match threshold, Found: 0, Expected 1\nerror during command execution: no matching attestations: failed to verify signature: could not verify envelope: accepted signatures do not match threshold, Found: 0, Expected 1",
+    "duration_ms": 904,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "b6b83fcb-d070-4f22-a563-ca49cfdd586a",
+    "timestamp_utc": "2026-10-20T18:27:18+00:00",
+    "action": "verify",
+    "test_label": "TC04b",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.0",
+    "resolved_digest": "sha256:6b00b34620a75c48de3e08a1964f67f82105050ab550a482436268e4d6867815",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:6b00b34620a75c48de3e08a1964f67f82105050ab550a482436268e4d6867815",
+    "decision": "REJECT",
+    "reason_code": "NO_SIGNATURE",
+    "reason": "The image has no Cosign signature in the registry.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": 10,
+    "tool_stderr_excerpt": "WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the signature.\nError: no signatures found\nerror during command execution: no signatures found",
+    "duration_ms": 730,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "96a93fef-382f-407d-92ee-db75ac7360e3",
+    "timestamp_utc": "2026-10-20T18:27:24+00:00",
+    "action": "deploy",
+    "test_label": "TC05a",
+    "image_ref": "localhost:5001/trustdeploy/sample-app:1.0.0",
+    "resolved_digest": "sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "verified_ref": "localhost:5001/trustdeploy/sample-app@sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1",
+    "decision": "REJECT",
+    "reason_code": "VERIFICATION_TOOL_ERROR",
+    "reason": "Verification tool not available (/nonexistent/cosign); failing closed.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": null,
+    "tool_stderr_excerpt": "",
+    "duration_ms": 333,
+    "operator": "amritnigam"
+  },
+  {
+    "event_id": "4d20eb95-5edc-4309-baa1-98f950ccafd4",
+    "timestamp_utc": "2026-10-20T18:27:31+00:00",
+    "action": "verify",
+    "test_label": "WEB-UI",
+    "image_ref": "docker.io/library/nginx:latest",
+    "resolved_digest": null,
+    "verified_ref": null,
+    "decision": "REJECT",
+    "reason_code": "REGISTRY_NOT_ALLOWED",
+    "reason": "Registry 'docker.io' is not in the policy allow-list.",
+    "policy": "trustdeploy-default",
+    "trusted_key_sha256": [
+      "e40f4da2c7a6c386"
+    ],
+    "tool_exit_code": null,
+    "tool_stderr_excerpt": "",
+    "duration_ms": 0,
+    "operator": "amritnigam"
+  }
+]

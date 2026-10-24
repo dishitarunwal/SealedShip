@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TrustDeploy Console</title>
+<style>
+:root{
+  --bg:#0b1020; --panel:#121a2e; --panel2:#18223a; --line:#24304d; --text:#e6ebf5; --muted:#8a96b3;
+  --ok:#2fd57a; --ok-bg:rgba(47,213,122,.12); --bad:#ff5468; --bad-bg:rgba(255,84,104,.12);
+  --run:#5aa9ff; --warn:#ffb547; --mono:"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{display:flex;align-items:center;gap:18px;padding:16px 28px;border-bottom:1px solid var(--line);background:#0e1528;position:sticky;top:0;z-index:5}
+.logo{display:flex;align-items:center;gap:12px}
+.logo svg{flex:none}
+.logo h1{margin:0;font-size:20px;letter-spacing:.3px}
+.logo p{margin:0;color:var(--muted);font-size:12px}
+.chips{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--muted);display:flex;gap:7px;align-items:center}
+.chip b{color:var(--text);font-weight:600}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.dot.on{background:var(--ok);box-shadow:0 0 8px var(--ok)} .dot.off{background:var(--bad)}
+main{padding:22px 28px;display:grid;align-items:start;grid-template-columns:minmax(330px,420px) 1fr;gap:20px;max-width:1500px;margin:0 auto}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+.panel h2{margin:0 0 4px;font-size:13px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:10px}
+.panel h2 .spacer{flex:1}
+.sub{color:var(--muted);font-size:12px;margin:0 0 14px}
+.full{grid-column:1/-1}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+@media (max-width:1050px){.duo{grid-template-columns:1fr}}
+/* images */
+.img{border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:12px;margin-bottom:10px;transition:border-color .2s}
+.img.sel{border-color:var(--run)}
+.img .tag{font-family:var(--mono);font-weight:600;font-size:13px}
+.img .about{color:var(--muted);font-size:12px;margin:3px 0 10px}
+.btns{display:flex;gap:6px;flex-wrap:wrap}
+button{font:inherit;font-size:12px;font-weight:600;border-radius:7px;border:1px solid var(--line);background:#1d2944;color:var(--text);padding:6px 11px;cursor:pointer;transition:.15s}
+button:hover{border-color:var(--run);background:#22325a}
+button:disabled{opacity:.45;cursor:wait}
+button.primary{background:#1f4fd1;border-color:#2b5ff0} button.primary:hover{background:#2b5ff0}
+input.custom{width:100%;font-family:var(--mono);font-size:12px;background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:8px}
+/* pipeline */
+.pipe{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:6px 0 18px}
+.step{position:relative;border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:12px 10px 10px;min-height:96px;transition:.25s}
+.step .n{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.step .t{font-weight:600;font-size:12.5px;margin-top:3px}
+.step .s{position:absolute;bottom:8px;left:10px;font-size:11px;font-weight:700;letter-spacing:.6px;color:var(--muted)}
+.step.run{border-color:var(--run);box-shadow:0 0 0 1px var(--run) inset}
+.step.run .s{color:var(--run)}
+.step.pass{border-color:rgba(47,213,122,.5);background:var(--ok-bg)} .step.pass .s{color:var(--ok)}
+.step.fail{border-color:var(--bad);background:var(--bad-bg);box-shadow:0 0 18px rgba(255,84,104,.25)} .step.fail .s{color:var(--bad)}
+.step.skip{opacity:.35}
+.step:not(:last-child)::after{content:"";position:absolute;right:-9px;top:50%;width:10px;height:2px;background:var(--line)}
+/* decision */
+.decision{display:grid;grid-template-columns:200px 1fr;gap:18px;align-items:stretch}
+.verdict{border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px dashed var(--line);color:var(--muted);min-height:150px;text-align:center;padding:10px}
+.verdict .big{font-size:30px;font-weight:800;letter-spacing:2px}
+.verdict.acc{background:var(--ok-bg);border:1px solid var(--ok);color:var(--ok)}
+.verdict.rej{background:var(--bad-bg);border:1px solid var(--bad);color:var(--bad)}
+.verdict .code{font-family:var(--mono);font-size:11px;margin-top:6px}
+.facts{display:grid;grid-template-columns:110px 1fr;gap:6px 12px;font-size:13px;align-content:start}
+.facts dt{color:var(--muted)} .facts dd{margin:0;word-break:break-all}
+.mono{font-family:var(--mono);font-size:12px}
+.deploybox{margin-top:12px;border-radius:10px;padding:10px 12px;font-family:var(--mono);font-size:12px;white-space:pre-wrap;word-break:break-all;display:none}
+.deploybox.ok{display:block;background:var(--ok-bg);border:1px solid rgba(47,213,122,.5)}
+.deploybox.bad{display:block;background:var(--bad-bg);border:1px solid rgba(255,84,104,.6)}
+/* scenarios */
+.scen{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;margin-bottom:12px}
+.scen button{text-align:left;padding:9px 11px;line-height:1.3}
+.scen button span{display:block;font-family:var(--mono);color:var(--run);font-size:11px}
+.scen button.passed{border-color:rgba(47,213,122,.6)} .scen button.failed{border-color:var(--bad)}
+pre.console{background:#070b16;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0;font-family:var(--mono);font-size:12px;max-height:340px;overflow:auto;white-space:pre-wrap;word-break:break-word}
+.l-ok{color:var(--ok)} .l-bad{color:var(--bad)} .l-dim{color:var(--muted)}
+/* k8s */
+.pods{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.pod{display:grid;grid-template-columns:1fr 1.4fr auto;align-items:center;gap:10px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-family:var(--mono);font-size:12px}
+.badge{font-size:11px;font-weight:700;padding:1px 8px;border-radius:9px}
+.badge.pend{background:rgba(255,181,71,.14);color:var(--warn)} .badge.acc{background:var(--ok-bg);color:var(--ok)} .badge.rej{background:var(--bad-bg);color:var(--bad)}
+/* audit */
+.stats{display:flex;gap:12px;margin:4px 0 14px;flex-wrap:wrap}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 16px;min-width:120px}
+.stat .v{font-size:24px;font-weight:800} .stat .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.stat.a .v{color:var(--ok)} .stat.r .v{color:var(--bad)}
+.tablewrap{max-height:420px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{position:sticky;top:0;background:#16203a;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);padding:9px 10px}
+td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}
+tr.new td{animation:flash 1.6s ease}
+@keyframes flash{from{background:rgba(90,169,255,.25)}to{background:transparent}}
+details{margin-top:12px} summary{cursor:pointer;color:var(--muted);font-size:12px}
+.key{font-family:var(--mono);font-size:11px;background:#070b16;border-radius:8px;padding:10px;white-space:pre-wrap;margin-top:8px;border:1px solid var(--line)}
+a{color:var(--run)}
+/* guided demo */
+.spot{box-shadow:0 0 0 2px var(--warn),0 0 28px rgba(255,181,71,.35);transition:box-shadow .3s}
+body.demo main{padding-bottom:210px}
+#demoBar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:linear-gradient(180deg,rgba(14,21,40,.96),#0e1528);border-top:2px solid var(--warn);padding:16px 28px 18px;display:none}
+body.demo #demoBar{display:block}
+#demoBar .row{display:flex;align-items:flex-start;gap:22px;max-width:1500px;margin:0 auto}
+#demoBar .count{font-family:var(--mono);color:var(--warn);font-size:13px;white-space:nowrap;padding-top:4px}
+#demoBar h3{margin:0 0 6px;font-size:22px}
+#demoBar p{margin:0;font-size:15.5px;color:#c9d2e6;max-width:1050px}
+#demoBar .nav{margin-left:auto;display:flex;gap:8px;align-items:center;white-space:nowrap}
+#demoBar .nav button{font-size:15px;padding:10px 18px}
+#demoNext{background:var(--warn);color:#1a1300;border-color:var(--warn)}
+#demoNext:hover{background:#ffc66e}
+.progress{height:4px;background:var(--line);border-radius:2px;margin:12px auto 0;max-width:1500px;overflow:hidden}
+.progress div{height:100%;background:var(--warn);transition:width .4s}
+@media (max-width:1050px){main{grid-template-columns:1fr}.pipe{grid-template-columns:repeat(3,1fr)}.decision{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <svg width="38" height="38" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l14 5v10c0 9-6 16-14 19C12 34 6 27 6 18V8z" fill="#1f4fd1"/><path d="M13.5 20l4.5 4.5 8.5-9" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div><h1>TrustDeploy</h1><p>Container image signature gate · verify before you deploy</p></div>
+  </div>
+  <div class="chips">
+    <div class="chip"><span class="dot" id="regDot"></span>Registry <b id="regTxt">…</b></div>
+    <div class="chip"><span class="dot" id="k8sDot"></span>Policy Controller <b id="k8sTxt">…</b></div>
+    <div class="chip">Trusted key <b class="mono" id="keyFp">…</b></div>
+    <div class="chip">Policy <b id="polName">…</b></div>
+    <button id="demoStart" onclick="startDemo()" style="border-color:var(--warn);color:var(--warn)">▶ Guided demo</button>
+  </div>
+</header>
+
+<main>
+  <section class="panel" id="pImages">
+    <h2>Registry images</h2>
+    <p class="sub">Images in the local registry. Pick one and send it through the gate.</p>
+    <div id="images"></div>
+    <input class="custom" id="customRef" placeholder="or type any image reference…" spellcheck="false">
+    <div class="btns"><button onclick="verify(document.getElementById('customRef').value)">Verify custom image</button></div>
+    <details id="policyDetails">
+      <summary>Trust policy &amp; public key</summary>
+      <div id="policyBox" class="sub" style="margin-top:8px"></div>
+      <div class="key" id="pubKey"></div>
+    </details>
+  </section>
+
+  <section class="panel" id="pGate">
+    <h2>Policy gate</h2>
+    <p class="sub">Every check must pass. Any failure or error means REJECT (fail closed).</p>
+    <div class="pipe" id="pipe"></div>
+    <div class="decision">
+      <div class="verdict" id="verdict"><div>Select an image<br>to verify</div></div>
+      <dl class="facts" id="facts">
+        <dt>Image</dt><dd class="mono">—</dd>
+      </dl>
+    </div>
+    <div class="deploybox" id="deploybox"></div>
+  </section>
+
+  <div class="full duo">
+  <section class="panel" id="pK8s">
+    <h2>Kubernetes admission <span class="spacer"></span><button onclick="loadK8s()">Refresh</button></h2>
+    <p class="sub">kind cluster with Sigstore Policy Controller. These requests skip TrustDeploy and go straight to the cluster's admission webhook.</p>
+    <div class="pods" id="pods"></div>
+    <pre class="console" id="k8sOut" style="max-height:200px">Use "Admit to K8s" on an image to try it.</pre>
+  </section>
+
+  <section class="panel" id="pScen">
+    <h2>Attack scenarios &amp; test cases</h2>
+    <p class="sub">Each button runs the real end-to-end test case (tests/cases.sh) and asserts the expected decision.</p>
+    <div class="scen" id="scen"></div>
+    <pre class="console" id="scenOut">Choose a scenario to run.</pre>
+  </section>
+
+  </div>
+
+  <section class="panel full" id="pAudit">
+    <h2>Audit log <span class="spacer"></span>
+      <button onclick="exportReport()">Export report (HTML/CSV/JSON)</button>
+      <a href="/report" target="_blank">Open HTML report ↗</a>
+    </h2>
+    <p class="sub">One append-only record per decision, from audit/audit-log.jsonl. No key material is stored.</p>
+    <div class="stats" id="stats"></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Time (UTC)</th><th>Source</th><th>Action</th><th>Image</th><th>Digest</th><th>Decision</th><th>Reason</th></tr></thead>
+      <tbody id="audit"></tbody>
+    </table></div>
+  </section>
+</main>
+
+<div id="demoBar">
+  <div class="row">
+    <div class="count" id="demoCount"></div>
+    <div><h3 id="demoTitle"></h3><p id="demoText"></p></div>
+    <div class="nav">
+      <button onclick="demoBack()">◀ Back</button>
+      <button id="demoNext" onclick="demoNext()">Next ▶</button>
+      <button onclick="endDemo()" title="Exit demo">✕</button>
+    </div>
+  </div>
+  <div class="progress"><div id="demoProg"></div></div>
+</div>
+
+<script>
+const STEPS = ["Registry allow-list", "Resolve tag → digest", "Signature present", "Signed by trusted key", "Signed digest = image", "Decision"];
+// Which step a reason code fails at (VERIFIED fails none).
+const FAIL_AT = {REGISTRY_NOT_ALLOWED: 0, IMAGE_RESOLUTION_FAILED: 1, NO_SIGNATURE: 2, VERIFICATION_TOOL_ERROR: 2, UNTRUSTED_SIGNER: 3, SIGNATURE_IMAGE_MISMATCH: 4};
+let busy = false, seenIds = new Set(), firstAuditLoad = true;
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+async function api(path, body) {
+  const r = await fetch(path, body ? {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)} : {});
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error || r.statusText);
+  return j;
+}
+
+function drawPipe(states) {
+  $("pipe").innerHTML = STEPS.map((t, i) => {
+    const st = states[i] || "";
+    const label = {run: "CHECKING…", pass: "PASS", fail: "FAIL", skip: "SKIPPED"}[st] || "WAITING";
+    return `<div class="step ${st}"><div class="n">0${i + 1}</div><div class="t">${t}</div><div class="s">${label}</div></div>`;
+  }).join("");
+}
+
+let animTimer;
+function animate() {
+  let i = 0; drawPipe(["run"]);
+  clearInterval(animTimer);
+  animTimer = setInterval(() => { i = Math.min(i + 1, 4); drawPipe(Array.from({length: i + 1}, (_, k) => k < i ? "pass" : "run")); }, 380);
+}
+
+function finishPipe(res) {
+  clearInterval(animTimer);
+  const f = FAIL_AT[res.reason_code];
+  const states = STEPS.map((_, i) => f === undefined ? "pass" : i < f ? "pass" : i === f ? "fail" : "skip");
+  states[5] = res.decision === "ACCEPT" ? "pass" : "fail";
+  drawPipe(states);
+}
+
+function showResult(res) {
+  finishPipe(res);
+  const acc = res.decision === "ACCEPT";
+  $("verdict").className = "verdict " + (acc ? "acc" : "rej");
+  $("verdict").innerHTML = `<div class="big">${res.decision}</div><div class="code">${res.reason_code}</div>`;
+  const ev = (res.evidence || "").trim().split("\n").pop();
+  $("facts").innerHTML = `
+    <dt>Image</dt><dd class="mono">${esc(res.image)}</dd>
+    <dt>Digest</dt><dd class="mono">${esc(res.digest || "— (not resolved)")}</dd>
+    <dt>Reason</dt><dd>${esc(res.reason)}</dd>
+    ${ev ? `<dt>Cosign evidence</dt><dd class="mono" style="color:var(--muted)">${esc(ev)}</dd>` : ""}
+    <dt>Audit event</dt><dd class="mono">${esc(res.event_id)} · ${esc(res.timestamp)} · ${res.duration_ms} ms</dd>`;
+  const d = res.deployment, box = $("deploybox");
+  if (!d) { box.className = "deploybox"; return; }
+  box.className = "deploybox " + (d.status === "DEPLOYED" ? "ok" : "bad");
+  box.textContent = d.status === "DEPLOYED"
+    ? `DEPLOYED (verified digest only)\n$ ${d.command}\n${d.output}`
+    : `DEPLOYMENT ${d.status}\n${d.output}`;
+}
+
+function showError(e) {
+  clearInterval(animTimer);
+  drawPipe(STEPS.map(() => "fail"));
+  $("verdict").className = "verdict rej";
+  $("verdict").innerHTML = `<div class="big">REJECT</div><div class="code">CONSOLE_ERROR</div>`;
+  $("facts").innerHTML = `<dt>Error</dt><dd>${esc(e.message)}</dd>`;
+}
+
+function setBusy(b) { busy = b; document.querySelectorAll("button").forEach(x => x.disabled = b); }
+
+async function runGate(path, body, cardId) {
+  if (busy || !body.image) return;
+  setBusy(true);
+  document.querySelectorAll(".img").forEach(c => c.classList.toggle("sel", c.id === cardId));
+  $("deploybox").className = "deploybox";
+  $("verdict").className = "verdict"; $("verdict").innerHTML = "<div>Verifying…</div>";
+  animate();
+  try { showResult(await api(path, body)); } catch (e) { showError(e); }
+  setBusy(false); loadAudit(); loadK8s();
+}
+const verify = (image, cardId) => runGate("/api/verify", {image}, cardId);
+const deploy = (image, target, cardId) => runGate("/api/deploy", {image, target}, cardId);
+
+async function admit(image) {
+  if (busy) return; setBusy(true);
+  $("k8sOut").innerHTML = `<span class="l-dim">kubectl run … --image=${esc(image)} (sent directly to the cluster)…</span>`;
+  try {
+    const r = await api("/api/k8s/admit", {image});
+    const cls = r.status === "ADMITTED" ? "l-ok" : "l-bad";
+    $("k8sOut").innerHTML = `<span class="${cls}"><b>${r.status}</b></span>  ${esc(r.image || "")}\n\n${colour(r.output)}`;
+  } catch (e) { $("k8sOut").textContent = e.message; }
+  setBusy(false); loadK8s();
+}
+
+async function loadImages() {
+  const r = await api("/api/images");
+  $("regDot").className = "dot " + (r.online ? "on" : "off");
+  $("regTxt").textContent = r.online ? "localhost:5001" : "offline";
+  if (!r.online) { $("images").innerHTML = `<p class="sub">Registry offline: ${esc(r.error)}</p>`; return; }
+  $("images").innerHTML = r.images.map((im, i) => {
+    const local = im.ref.startsWith("localhost:5001");
+    const ref = JSON.stringify(im.ref).replace(/"/g, "&quot;");
+    return `<div class="img" id="img${i}" data-ref="${esc(im.ref)}">
+      <div class="tag">${esc(im.tag)}</div><div class="about">${esc(im.about)}</div>
+      <div class="btns">
+        <button class="primary" onclick="verify(${ref},'img${i}')">Verify</button>
+        <button onclick="deploy(${ref},'docker','img${i}')">Deploy → Docker</button>
+        ${local ? `<button onclick="admit(${ref})">Admit to K8s</button>` : ""}
+      </div></div>`;
+  }).join("");
+}
+
+async function loadPolicy() {
+  const p = await api("/api/policy");
+  $("keyFp").textContent = p.keys[0].sha256;
+  $("polName").textContent = p.name;
+  $("policyBox").innerHTML = `${esc(p.description)}<br><br><b>Allowed registries:</b> ${p.allowed_registries.map(esc).join(", ")}<br><b>Trusted key:</b> ${esc(p.keys[0].path)} (sha256 ${p.keys[0].sha256})<br><b>Transparency log:</b> ${esc(p.tlog)}`;
+  $("pubKey").textContent = p.public_key;
+}
+
+async function loadK8s() {
+  try {
+    const r = await api("/api/k8s");
+    const on = r.online && r.policy_controller === "Running";
+    $("k8sDot").className = "dot " + (on ? "on" : "off");
+    $("k8sTxt").textContent = r.online ? r.policy_controller : "cluster offline";
+    $("pods").innerHTML = !r.online ? `<p class="sub">${esc(r.error)}</p>` : r.pods.length
+      ? r.pods.map(p => `<div class="pod"><span>${esc(p.name)}</span><span style="color:var(--muted)">${esc(p.image.slice(0, 32))}…</span><span class="badge ${p.phase === "Running" || p.phase === "Succeeded" ? "acc" : p.phase === "Pending" ? "pend" : "rej"}">${esc(p.phase)}</span></div>`).join("")
+      : `<p class="sub">No pods in namespace trustdeploy.</p>`;
+  } catch (e) { $("k8sTxt").textContent = "error"; }
+}
+
+function colour(text) {
+  return esc(text).split("\n").map(l => {
+    const u = l.toUpperCase();
+    if (/REJECT|DENIED|BLOCKED|FAIL|ERROR/.test(u) && !/PASS \(/.test(u)) return `<span class="l-bad">${l}</span>`;
+    if (/ACCEPT|PASS|DEPLOYING|CREATED/.test(u)) return `<span class="l-ok">${l}</span>`;
+    return l;
+  }).join("\n");
+}
+
+async function loadScenarios() {
+  const s = await api("/api/scenarios");
+  $("scen").innerHTML = Object.entries(s).map(([id, t]) => `<button id="sc-${id}" onclick="scenario('${id}')"><span>${id}</span>${esc(t)}</button>`).join("");
+}
+
+async function scenario(id) {
+  if (busy) return; setBusy(true);
+  $("scenOut").innerHTML = `<span class="l-dim">$ tests/cases.sh ${id}\nrunning…</span>`;
+  try {
+    const r = await api("/api/scenario", {id});
+    $("scenOut").innerHTML = `<span class="l-dim">$ tests/cases.sh ${id}</span>\n${colour(r.output)}`;
+    $("sc-" + id).classList.remove("passed", "failed");
+    $("sc-" + id).classList.add(r.passed ? "passed" : "failed");
+  } catch (e) { $("scenOut").textContent = e.message; }
+  setBusy(false); loadAudit(); loadImages(); loadK8s();
+}
+
+async function loadAudit() {
+  const rows = await api("/api/audit");
+  const acc = rows.filter(r => r.decision === "ACCEPT").length;
+  $("stats").innerHTML = `
+    <div class="stat"><div class="v">${rows.length}</div><div class="k">Decisions</div></div>
+    <div class="stat a"><div class="v">${acc}</div><div class="k">Accepted</div></div>
+    <div class="stat r"><div class="v">${rows.length - acc}</div><div class="k">Rejected</div></div>`;
+  $("audit").innerHTML = rows.slice(0, 200).map(r => {
+    const isNew = !firstAuditLoad && !seenIds.has(r.event_id);
+    seenIds.add(r.event_id);
+    return `<tr class="${isNew ? "new" : ""}"><td class="mono">${esc(r.timestamp_utc.replace("T", " ").replace("+00:00", ""))}</td>
+      <td>${esc(r.test_label || "")}</td><td>${esc(r.action)}</td><td class="mono">${esc(r.image_ref.split("/").pop())}</td>
+      <td class="mono" title="${esc(r.resolved_digest || "")}">${r.resolved_digest ? esc(r.resolved_digest.slice(7, 19)) + "…" : "—"}</td>
+      <td><span class="badge ${r.decision === "ACCEPT" ? "acc" : "rej"}">${r.decision}</span></td>
+      <td><span class="mono">${esc(r.reason_code)}</span><br><span style="color:var(--muted)">${esc(r.reason)}</span></td></tr>`;
+  }).join("");
+  firstAuditLoad = false;
+}
+
+async function exportReport(quiet) {
+  const r = await api("/api/report", {});
+  await loadAudit();
+  if (!quiet) alert("Report written:\n" + r.paths.join("\n"));
+}
+
+// ---------- guided demo ----------
+const R = "localhost:5001/trustdeploy/sample-app:";
+const cardFor = ref => [...document.querySelectorAll(".img")].find(c => c.dataset.ref === ref)?.id;
+const DEMO = [
+  {t: "TrustDeploy: verify before you deploy", panel: null,
+   x: "If someone compromises a build pipeline or swaps an image in a registry, malicious code can reach production. TrustDeploy sits between the registry and deployment and only lets through images that carry a valid Cosign signature from our trusted key."},
+  {t: "The trust policy", panel: "pImages", run: async () => { $("policyDetails").open = true; $("policyDetails").scrollIntoView({behavior: "smooth", block: "center"}); },
+   x: "The policy lists one trusted public key (its fingerprint is shown in the header) and the registries we allow. The private signing key is stored encrypted outside the project and never goes into an image."},
+  {t: "Images waiting in the registry", panel: "pImages", run: async () => { $("policyDetails").open = false; },
+   x: "The registry holds the approved release 1.0.0 and several attack images: one never signed, one signed with an attacker's key, and one carrying a genuine signature copied from another image. We'll send each through the gate."},
+  {t: "TC01 · Verify the approved release", panel: "pGate", run: () => verify(R + "1.0.0", cardFor(R + "1.0.0")),
+   x: "The gate checks the registry, resolves the mutable tag to its immutable digest, finds the signature, checks it against the trusted key, and confirms the signed digest matches. Every check passes: ACCEPT."},
+  {t: "Deploy the verified image", panel: "pGate", run: () => deploy(R + "1.0.0", "docker", cardFor(R + "1.0.0")),
+   x: "Deployment only runs after an ACCEPT, and it deploys the exact digest that was verified, never the tag, so the image can't be swapped between check and deploy."},
+  {t: "TC02 · Unsigned image", panel: "pGate", run: () => verify(R + "1.1.0-unsigned", cardFor(R + "1.1.0-unsigned")),
+   x: "This image was built but never signed. There's no signature to verify, so it's rejected with NO_SIGNATURE."},
+  {t: "TC03 · Signed with an attacker's key", panel: "pGate", run: () => verify(R + "1.0.1-attacker", cardFor(R + "1.0.1-attacker")),
+   x: "This backdoored image does have a valid signature, but it's from the attacker's own key. Having a signature isn't enough; it must be from our trusted key: UNTRUSTED_SIGNER."},
+  {t: "TC04 · A genuine signature copied to another image", panel: "pGate", run: () => verify(R + "1.0.2-forged", cardFor(R + "1.0.2-forged")),
+   x: "The attacker copied our real signature onto their image. The signature is cryptographically valid, but it was issued for a different digest, so the binding check fails: SIGNATURE_IMAGE_MISMATCH."},
+  {t: "Policy enforcement · deployment blocked", panel: "pGate", run: () => deploy(R + "1.0.1-attacker", "docker", cardFor(R + "1.0.1-attacker")),
+   x: "When someone tries to deploy the attacker's image, the gate rejects it and the deployment never starts. A verification failure is never silently treated as success."},
+  {t: "TC04b · Trusted tag hijacked", panel: "pScen", run: () => scenario("TC04b"),
+   x: "Here the attacker overwrites our trusted tag 1.0.0 with a tampered build. Because TrustDeploy always resolves the tag to its real digest, it sees an unsigned image and rejects it. The tag is then restored."},
+  {t: "TC05 · Fail closed when the verifier breaks", panel: "pScen", run: () => scenario("TC05a"),
+   x: "Even for a correctly signed image, if the Cosign tool is missing or crashes, TrustDeploy denies the deployment. Errors never fail open."},
+  {t: "TC05c · Registry outside the allow-list", panel: "pGate", run: () => verify("docker.io/library/nginx:latest", cardFor("docker.io/library/nginx:latest")),
+   x: "An image from Docker Hub is rejected before it's even downloaded, because that registry isn't in the policy."},
+  {t: "Kubernetes · signed image admitted", panel: "pK8s", run: () => admit(R + "1.0.0"),
+   x: "The same rule is enforced inside Kubernetes. The Sigstore Policy Controller admission webhook checks every new pod; our signed release is admitted."},
+  {t: "Kubernetes · attacker image denied at admission", panel: "pK8s", run: () => admit(R + "1.0.1-attacker"),
+   x: "Even if someone bypasses TrustDeploy and talks to the cluster directly, the admission webhook refuses the attacker-signed image. No pod is created."},
+  {t: "Audit trail", panel: "pAudit", run: () => exportReport(true),
+   x: "Every decision is logged with its time, image, digest, decision, reason and evidence, and never any key material. The log can be exported as an HTML, CSV or JSON report for auditors."},
+  {t: "Summary", panel: null,
+   x: "Only images signed by our trusted key, for that exact digest, from allowed registries get deployed. Everything else is blocked and recorded. Limitation: a signature proves where an image came from, not that it's free of vulnerabilities; scanning and SBOMs are future work."},
+];
+let demoIdx = -1;
+function spotlight(id) {
+  document.querySelectorAll(".spot").forEach(e => e.classList.remove("spot"));
+  if (!id) { window.scrollTo({top: 0, behavior: "smooth"}); return; }
+  $(id).classList.add("spot");
+  $(id).scrollIntoView({behavior: "smooth", block: id === "pAudit" ? "start" : "center"});
+}
+async function showDemoStep(i, runIt) {
+  demoIdx = Math.max(0, Math.min(DEMO.length - 1, i));
+  const st = DEMO[demoIdx];
+  $("demoCount").textContent = `STEP ${demoIdx + 1} / ${DEMO.length}`;
+  $("demoTitle").textContent = st.t;
+  $("demoText").textContent = st.x;
+  $("demoProg").style.width = ((demoIdx + 1) / DEMO.length * 100) + "%";
+  $("demoNext").textContent = demoIdx === DEMO.length - 1 ? "Finish ✓" : "Next ▶";
+  spotlight(st.panel);
+  if (runIt && st.run) { await new Promise(r => setTimeout(r, 600)); await st.run(); spotlight(st.panel); }
+}
+function startDemo() { document.body.classList.add("demo"); showDemoStep(0, true); }
+function endDemo() { document.body.classList.remove("demo"); spotlight(null); demoIdx = -1; }
+function demoNext() { if (busy) return; demoIdx === DEMO.length - 1 ? endDemo() : showDemoStep(demoIdx + 1, true); }
+function demoBack() { if (busy) return; showDemoStep(demoIdx - 1, false); }
+document.addEventListener("keydown", e => {
+  if (!document.body.classList.contains("demo")) return;
+  if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); demoNext(); }
+  if (e.key === "ArrowLeft") demoBack();
+});
+
+drawPipe([]);
+loadPolicy(); loadImages().then(() => { const m = location.search.match(/demo=(\d+)/); if (m) { document.body.classList.add("demo"); showDemoStep(+m[1] - 1, true); } else if (location.search.includes("demo")) startDemo(); }); loadK8s(); loadScenarios(); loadAudit();
+</script>
+</body>
+</html>

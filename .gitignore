@@ -1,0 +1,10 @@
+# Signing keys must never be committed
+*.key
+.secrets/
+__pycache__/
+
+# OS cruft
+.DS_Store
+
+# Exceeds GitHub 100MB file limit
+docs/demo/*.mov

@@ -1,0 +1,8 @@
+{
+  "policy_name": "trustdeploy-default",
+  "description": "Images must be referenced by digest after resolution and carry a valid Cosign signature from the TrustDeploy release key.",
+  "trusted_public_keys": ["trusted/cosign.pub"],
+  "allowed_registries": ["localhost:5001", "td-registry.local:5000"],
+  "transparency_log": "disabled (offline key-based prototype)",
+  "verification_timeout_seconds": 60
+}

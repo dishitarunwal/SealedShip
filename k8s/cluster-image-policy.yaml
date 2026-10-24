@@ -1,0 +1,18 @@
+# Sigstore Policy Controller: only admit images from the TrustDeploy registry that are
+# signed by the TrustDeploy release key. Applies to namespaces labelled policy.sigstore.dev/include=true.
+apiVersion: policy.sigstore.dev/v1beta1
+kind: ClusterImagePolicy
+metadata:
+  name: trustdeploy-signed-images
+spec:
+  images:
+    - glob: "td-registry.local:5000/**"
+  authorities:
+    - name: trustdeploy-release-key
+      key:
+        hashAlgorithm: sha256
+        data: |
+          -----BEGIN PUBLIC KEY-----
+          MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEY2b6FmBx0DgxS6U62bBEmCVBe5CK
+          AV4VHFUgHPELCYOUwm5WMSa4Y9tspN9Mj7+8kKT+Adohn6AeA8R/AHH3BA==
+          -----END PUBLIC KEY-----

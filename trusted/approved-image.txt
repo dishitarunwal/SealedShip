@@ -1,0 +1,1 @@
+localhost:5001/trustdeploy/sample-app@sha256:deffd203e38fc26a1c0fdb4a8d60a2de55884f4dc1946fc184d50bbe4a4c28b1
